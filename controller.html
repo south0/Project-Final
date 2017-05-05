@@ -1,0 +1,139 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+
+  <!-- to get rid of favicon request in console -->
+  <link rel="shortcut icon" href="">
+
+  <!-- P5 STUFF -->
+  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+  
+
+  <!-- SOCKET STUFF -->
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+  <script type="text/javascript">
+    
+    /// SOCKET STUFF
+    var socket = io.connect();
+    
+    socket.on('connect', function() {
+      console.log("Connected");
+    });
+
+
+    var speed;
+    
+
+
+
+   
+ 
+
+    function setup() {
+  createCanvas(windowWidth, windowHeight);
+
+x1= windowWidth/1.2;
+y1 = windowHeight/ 1.4;
+x2= windowWidth/1.5;
+y2 = windowHeight/ 1.4;
+x3= windowWidth/2;
+y3 = windowHeight/ 1.4;
+x4= windowWidth/14;
+y4 = windowHeight/ 1.4;
+x5= windowWidth/4;
+y5 = windowHeight/ 1.5;
+x6= windowWidth/1.1;
+y6 = windowHeight/ 9;
+x7= windowWidth/10;
+y7 = windowHeight/ 9;
+x8= windowWidth/3.5;
+y8 = windowHeight/ 9;
+
+ghost = loadImage("ghost/ghost.png"); 
+ghostb = loadImage("ghostB/ghostB1.png");
+panda = loadImage("panda/panda1.png");
+plus = loadImage("plus.png");
+minus = loadImage("minus.png");
+  }
+
+  function draw(){
+    background(50);
+    image(ghost, x1, y1);
+    image(ghostb, x2, y2);
+    image(panda, x3, y3);
+    image(minus, x4, y4, minus.width/4, minus.height/4);
+    image(plus, x5, y5, plus.width/4, plus.height/4);
+    fill('red');
+    ellipse(x6, y6, 60, 60);
+    fill('black');
+    ellipse(x7, y7, 60, 60);
+    fill('white');
+    ellipse(x8, y8, 60, 60);
+    
+
+ 
+}
+  
+function mousePressed() {
+
+   var distance1= dist(mouseX, mouseY, x1, y1);
+  var distance2= dist(mouseX, mouseY, x2, y2);
+  var distance3= dist(mouseX, mouseY, x3, y3);
+  var distance4= dist(mouseX, mouseY, x4, y4);
+   var distance5= dist(mouseX, mouseY, x5, y5);
+   var distance6= dist(mouseX, mouseY, x6, y6);
+     var distance7= dist(mouseX, mouseY, x7, y7);
+   var distance8= dist(mouseX, mouseY, x8, y8);
+
+    if(distance1< 100){
+      socket.emit('ghost');
+      }
+     if(distance2< 100){
+     socket.emit('ghostb');
+     }
+     if(distance3< 100){
+     socket.emit('panda');
+     }
+     if(distance4< 60){
+      socket.emit('small');
+      }
+      if(distance5< 60){
+      socket.emit('big');
+      }
+      if(distance6< 60){
+      socket.emit('gravity');
+      }
+      if(distance7< 60){
+      socket.emit('dark');
+      }
+      if(distance8< 60){
+      socket.emit('light');
+      }
+  
+}
+
+function deviceShaken(){
+
+  acceleration = map(accelerationX, .05, 1, 0, 1);
+
+  speed = (acceleration * acceleration)/2500;
+
+  socket.emit('speed', speed);
+
+}
+
+
+
+
+  </script>
+
+
+
+  <style> body {padding: 0; margin: 0;}</style>
+</head>
+
+<body>
+
+</body>
+</html>
